@@ -99,7 +99,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="flex gap-5 capitalize  font-semibold text-[#3f4563] px-2">
+                    <ul className="flex gap-5 capitalize font-semibold text-[#3f4563] px-2">
                         {navlinks}
                     </ul>
                 </div>

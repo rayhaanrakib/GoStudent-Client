@@ -1,18 +1,37 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet';
 
+const userPerPage = 10;
 const UsersInfo = () => {
     const axiosSecure = useAxiosSecure();
-    const { data: users = [], refetch } = useQuery({
+    const [currentPage, setCurrentPage] = useState(1);
+    const { data: users = [], refetch,isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get('/api/v1/users/private');
             return res.data;
         }
     })
+    if (isLoading) {
+        return;
+    }
+
+    const totalUsers = users.length;
+    const totalPages = Math.ceil(totalUsers / userPerPage);
+    console.log(totalPages);
+
+    const paginatedData = useMemo(() => {
+        const startIndex = (currentPage - 1) * userPerPage;
+        const endIndex = startIndex + userPerPage;
+        return users.slice(startIndex, endIndex);
+    }, [users, currentPage]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+    }
 
     const handleMakeAdmin = user => {
         Swal.fire({
@@ -45,12 +64,13 @@ const UsersInfo = () => {
         <div className='px-5 lg:px-0'>
             <Helmet title={`All Users | GS Classroom`} />
             <div className='max-w-3xl mx-auto mt-10'>
-                <h2 className='capitalize text-2xl font-semibold'>total users: {users?.length} </h2>
+                <h2 className='capitalize text-2xl font-semibold'>total users: {paginatedData?.length} </h2>
             </div>
+
             <div className='max-w-5xl mx-auto mt-10'>
                 <div className="overflow-x-auto">
                     {
-                        users.length > 0 ? (<table className="table">
+                        users?.length > 0 ? (<table className="table">
                             <thead>
                                 <tr>
                                     <th>SN</th>
@@ -63,18 +83,18 @@ const UsersInfo = () => {
                             </thead>
                             <tbody>
                                 {
-                                    users?.map((user, index) =>
-                                        <tr key={user._id} className="hover">
+                                    users?.map((currentUser, index) =>
+                                        <tr key={currentUser._id} className="hover">
                                             <th>{index + 1}</th>
                                             <td>
-                                                <img className='w-10 h-10 rounded-md object-cover' src={user?.photoURL} alt="" />
+                                                <img className='w-10 h-10 rounded-md object-cover' src={currentUser?.photoURL} alt="" />
                                             </td>
-                                            <td>{user?.displayName}</td>
-                                            <td>{user?.email}</td>
-                                            <td>{user?.role}</td>
+                                            <td>{currentUser?.displayName}</td>
+                                            <td>{currentUser?.email}</td>
+                                            <td>{currentUser?.role}</td>
                                             <td>
                                                 {
-                                                    user?.role === "admin" ? 'Already Added' : <button onClick={() => handleMakeAdmin(user)}><img className='w-10 h-10 ml-3 object-cover' src="https://i.ibb.co/tHhLQdc/admin.png" alt="" /></button>
+                                                    currentUser?.role === "admin" ? 'Already Added' : <button onClick={() => handleMakeAdmin(currentUser)}><img className='w-10 h-10 ml-3 object-cover' src="https://i.ibb.co/tHhLQdc/admin.png" alt="" /></button>
                                                 }
                                             </td>
                                         </tr>
@@ -90,6 +110,30 @@ const UsersInfo = () => {
 
                 </div>
             </div>
+
+            
+
+
+
+
+            <div>
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
+                </div>
+
+
+
+
+
+
+
         </div>
     );
 };
