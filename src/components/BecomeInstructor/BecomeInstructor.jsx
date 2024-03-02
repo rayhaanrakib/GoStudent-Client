@@ -14,9 +14,10 @@ const BecomeInstructor = () => {
                     </div>
                     <div data-aos="fade-up" className="w-full lg:w-7/12 ml-auto mr-auto px-4">
                         <div className="md:pr-12">
-                            <div className="text-xl text-white p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-xl rounded-full bg-accent mt-8 lg:mt-0">
-                                <FaRocket />
+                            <div className='w-16 h-16 rounded-full overflow-hidden flex items-center justify-center mb-8'>
+                                <img className='w-36 h-36 object-cover rounded-full shadow-md' src="https://cliply.co/wp-content/uploads/2019/09/371909290_ROCKET_400px.gif" alt="" />
                             </div>
+
                             <h3 className="text-3xl font-semibold">Instructor At GoStudent</h3>
                             <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
                                 Inspire and educate by joining our community of instructors. Share your expertise, passion, and knowledge with learners around the world. Become a part of our dynamic platform and help shape the future of online education.

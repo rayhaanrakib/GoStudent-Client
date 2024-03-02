@@ -35,13 +35,13 @@ const OurCourses = () => {
                 >
                     {
                         topCourses?.map(course => <SwiperSlide key={course._id}>
-                            <div className="max-w-sm rounded-lg shadow-md bg-white">
+                            <div className="max-w-sm rounded-lg shadow-md bg-white mb-16">
                                 <div className='h-56 w-full'>
                                     <img className="rounded-t-lg object-cover" src={course.courseImage} alt="" />
                                 </div>
                                 <div className="p-5">
                                     <a>
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight">{course.courseName}</h5>
+                                        <h5 className="mb-2 text-xl font-semibold tracking-tight">{course.courseName}</h5>
                                     </a>
                                     <p className="mb-3 font-normal text-primary">Total Enrollment: {course.totalEnrollment}</p>
                                     <p className="mb-3 h-20 font-normal text-gray-400">{course.shortDescription}</p>
