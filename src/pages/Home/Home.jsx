@@ -10,6 +10,7 @@ import BecomeInstructor from '../../components/BecomeInstructor/BecomeInstructor
 import OurServices from './../../components/OurServices/OurServices';
 import Faq from '../../components/Faq/Faq';
 import AboutUs from '../../components/AboutUs/AboutUs';
+import Newsletter from '../../components/Newsletter/Newsletter';
 
 const Home = () => {
     return (
@@ -21,6 +22,7 @@ const Home = () => {
             <div data-aos="fade-up" className='container mx-auto mt-20'>
                 <Partners />
             </div>
+
             <div data-aos="fade-up" className='container mx-auto mt-20'>
                 <Feedback />
             </div>
@@ -39,10 +41,13 @@ const Home = () => {
             <div data-aos="fade-up" className='container mx-auto mt-20'>
                 <AboutUs />
             </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
+            <div data-aos="fade-up" className='container mx-auto mt-10'>
                 <Faq />
             </div>
-            
+            <div data-aos="fade-up" className='container mx-auto mt-10'>
+                <Newsletter />
+            </div>
+
             <ScrollToTop className='flex justify-center items-center' smooth />
         </div>
 
