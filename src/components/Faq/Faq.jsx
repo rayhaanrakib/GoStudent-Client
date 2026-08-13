@@ -1,154 +1,93 @@
-import React from 'react';
-import SectionTitle from './../../shared/SectionTitle';
+import React, { useState } from 'react';
+
+const faqs = [
+    {
+        q: "How can I enroll in a course on GoStudent Classroom?",
+        a: "Enrolling is simple! Browse our course catalog, select the course you're interested in, and click 'Enroll' to begin your personalized learning journey instantly.",
+    },
+    {
+        q: "What payment methods are accepted?",
+        a: "We accept all major credit/debit cards, PayPal, and popular digital wallets, ensuring a convenient and fully secure checkout experience.",
+    },
+    {
+        q: "Can I access course materials after completing a course?",
+        a: "Absolutely! Once enrolled, you have lifetime access to all course materials — revisit lessons, download resources, and refresh your knowledge anytime.",
+    },
+    {
+        q: "How do I contact customer support?",
+        a: "Our support team is available 24/7. Use the 'Contact Us' page, live chat, or email us directly, and we'll respond promptly to resolve any issue.",
+    },
+    {
+        q: "Is my payment information secure?",
+        a: "Yes, we use industry-standard SSL encryption and never store your payment details on our servers. Your security is our highest priority.",
+    },
+];
 
 const Faq = () => {
-    return (
-        <div data-aos="fade-up">
-            <div className="max-w-[85rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-                <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-                    <SectionTitle heading="Frequently Asked Questions" />
-                    <h2 className="text-2xl font-bold md:text-4xl md:leading-tight">Your questions, answered</h2>
-                    <p className="mt-1 text-gray-600 ">Answers to the most frequently asked questions.</p>
-                </div>
+    const [open, setOpen] = useState(0);
 
-                <div className="max-w-2xl mx-auto">
-                    <section className="w-full divide-y divide-slate-200 rounded bg-white shadow-md shadow-slate-200">
-                        <details className="group p-4" open>
-                            <summary className="relative cursor-pointer list-none pr-8 font-medium text-slate-700 transition-colors duration-300 focus-visible:outline-none group-hover:text-slate-900  [&::-webkit-details-marker]:hidden">
-                                How can I enroll in a course on GoStudent Classroom?
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="absolute right-0 top-1 h-4 w-4 shrink-0 stroke-slate-700 transition duration-300 group-open:rotate-45"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    aria-labelledby="title-ac13 desc-ac13"
+    return (
+        <div className='py-24 bg-white'>
+            <div className="container mx-auto px-6 lg:px-8">
+                <div className="grid lg:grid-cols-2 gap-16 items-start">
+                    {/* Left */}
+                    <div className="lg:sticky lg:top-24">
+                        <span className="inline-block text-violet-600 text-sm font-semibold tracking-widest uppercase mb-4">
+                            FAQ
+                        </span>
+                        <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-6">
+                            Got Questions?
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-blue-600">
+                                We've Got Answers.
+                            </span>
+                        </h2>
+                        <p className="text-slate-500 leading-relaxed text-lg mb-8">
+                            Can't find what you're looking for? Our support team is always here to help you.
+                        </p>
+                        <div className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-2xl p-6 border border-violet-100">
+                            <p className="text-slate-700 font-semibold mb-2">Still have questions?</p>
+                            <p className="text-slate-500 text-sm mb-4">Our team responds within 24 hours.</p>
+                            <a
+                                href="#contact"
+                                className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 text-sm"
+                            >
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Right - Accordion */}
+                    <div className="space-y-3">
+                        {faqs.map((faq, i) => (
+                            <div
+                                key={i}
+                                className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+                                    open === i
+                                        ? 'border-violet-200 shadow-lg shadow-violet-500/10'
+                                        : 'border-slate-200 hover:border-slate-300'
+                                }`}
+                            >
+                                <button
+                                    onClick={() => setOpen(open === i ? -1 : i)}
+                                    className="w-full flex items-center justify-between gap-4 p-6 text-left"
                                 >
-                                    <title id="title-ac13">Open icon</title>
-                                    <desc id="desc-ac13">
-                                        icon that represents the state of the summary
-                                    </desc>
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 4v16m8-8H4"
-                                    />
-                                </svg>
-                            </summary>
-                            <p className="mt-4 text-slate-500">
-                                Enrolling in a course is simple! Just browse our course catalog, select the course you're interested in, and click the "Enroll" button to get started on your learning journey.
-                            </p>
-                        </details>
-                        <details className="group p-4">
-                            <summary className="relative cursor-pointer list-none pr-8 font-medium text-slate-700 transition-colors duration-300 focus-visible:outline-none group-hover:text-slate-900  [&::-webkit-details-marker]:hidden">
-                                What payment methods are accepted on GoStudent Classroom?
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="absolute right-0 top-1 h-4 w-4 shrink-0 stroke-slate-700 transition duration-300 group-open:rotate-45"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    aria-labelledby="title-ac14 desc-ac14"
-                                >
-                                    <title id="title-ac14">Open icon</title>
-                                    <desc id="desc-ac14">
-                                        icon that represents the state of the summary
-                                    </desc>
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 4v16m8-8H4"
-                                    />
-                                </svg>
-                            </summary>
-                            <p className="mt-4 text-slate-500">
-                                We accept a variety of payment methods, including major credit/debit cards and digital payment platforms, ensuring a convenient and secure transaction process for our users.
-                            </p>
-                        </details>
-                        <details className="group p-4">
-                            <summary className="relative cursor-pointer list-none pr-8 font-medium text-slate-700 transition-colors duration-300 focus-visible:outline-none group-hover:text-slate-900  [&::-webkit-details-marker]:hidden">
-                                Can I access course materials after completing a course?
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="absolute right-0 top-1 h-4 w-4 shrink-0 stroke-slate-700 transition duration-300 group-open:rotate-45"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    aria-labelledby="title-ac16 desc-ac16"
-                                >
-                                    <title id="title-ac16">Open icon</title>
-                                    <desc id="desc-ac16">
-                                        icon that represents the state of the summary
-                                    </desc>
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 4v16m8-8H4"
-                                    />
-                                </svg>
-                            </summary>
-                            <p className="mt-4 text-slate-500">
-                                Yes, you'll have lifetime access to course materials once you've successfully completed a course on GoStudent Classroom. This allows you to revisit the content whenever you need to reinforce your learning or brush up on specific topics.
-                            </p>
-                        </details>
-                        <details className="group p-4">
-                            <summary className="relative cursor-pointer list-none pr-8 font-medium text-slate-700 transition-colors duration-300 focus-visible:outline-none group-hover:text-slate-900  [&::-webkit-details-marker]:hidden">
-                                How do I contact customer support for assistance?
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="absolute right-0 top-1 h-4 w-4 shrink-0 stroke-slate-700 transition duration-300 group-open:rotate-45"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    aria-labelledby="title-ac14 desc-ac14"
-                                >
-                                    <title id="title-ac14">Open icon</title>
-                                    <desc id="desc-ac14">
-                                        icon that represents the state of the summary
-                                    </desc>
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 4v16m8-8H4"
-                                    />
-                                </svg>
-                            </summary>
-                            <p className="mt-4 text-slate-500">
-                                If you have any questions or need assistance, our customer support team is here to help! You can reach out to us through the "Contact Us" page, and we'll respond to your inquiry promptly to ensure a smooth learning experience.
-                            </p>
-                        </details>
-                        <details className="group p-4">
-                            <summary className="relative cursor-pointer list-none pr-8 font-medium text-slate-700 transition-colors duration-300 focus-visible:outline-none group-hover:text-slate-900  [&::-webkit-details-marker]:hidden">
-                                Is my payment information secure?
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="absolute right-0 top-1 h-4 w-4 shrink-0 stroke-slate-700 transition duration-300 group-open:rotate-45"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    aria-labelledby="title-ac14 desc-ac14"
-                                >
-                                    <title id="title-ac14">Open icon</title>
-                                    <desc id="desc-ac14">
-                                        icon that represents the state of the summary
-                                    </desc>
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 4v16m8-8H4"
-                                    />
-                                </svg>
-                            </summary>
-                            <p className="mt-4 text-slate-500">
-                                Yes, protecting your personal and payment information is our top priority. We utilize industry-standard encryption technology to ensure that your payment details are securely transmitted during the checkout process. Your information is never stored on our servers, providing you with peace of mind when making online purchases.
-                            </p>
-                        </details>
-                    </section>
+                                    <span className={`font-semibold ${open === i ? 'text-violet-700' : 'text-slate-900'}`}>
+                                        {faq.q}
+                                    </span>
+                                    <span className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                        open === i ? 'bg-violet-600 text-white rotate-45' : 'bg-slate-100 text-slate-500'
+                                    }`}>
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div className={`overflow-hidden transition-all duration-300 ${open === i ? 'max-h-40 pb-6' : 'max-h-0'}`}>
+                                    <p className="px-6 text-slate-500 leading-relaxed">{faq.a}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

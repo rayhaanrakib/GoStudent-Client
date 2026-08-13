@@ -3,3 +3,62 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Baloo Da 2', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 250ms;
+  }
+
+  /* Light mode defaults */
+  body {
+    @apply bg-surface text-text-primary antialiased;
+  }
+
+  /* Dark mode overrides */
+  .dark body {
+    @apply bg-surface-dark text-text-primary-dark;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-text-primary;
+  }
+
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5,
+  .dark h6 {
+    @apply text-text-primary-dark;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Swiper pagination dark mode support */
+.swiper-pagination-bullet {
+  @apply bg-gray-400 opacity-60;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-primary opacity-100;
+}
+
+.dark .swiper-pagination-bullet {
+  @apply bg-gray-500 opacity-50;
+}
+
+.dark .swiper-pagination-bullet-active {
+  @apply bg-primary opacity-100;
+}

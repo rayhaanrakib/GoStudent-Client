@@ -1,41 +1,114 @@
-import { FaUserFriends } from "react-icons/fa";
+import { FaUserFriends, FaStar, FaArrowRight } from "react-icons/fa";
+import { MdOutlineTimer, MdOutlinePlayLesson } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import TruncatedText from './../../shared/TruncatedText';
-
 
 const CourseCard = ({ course }) => {
-    const { _id, courseName, shortDescription, instructorName, courseImage, totalEnrollment, price } = course;
-    return (
-        <div data-aos="fade-up" className="border-gray-100 border rounded-lg group">
-            <div className="bg-white shadow-md hover:shadow-xl rounded-lg px-5 pt-5 lg:w-96 h-[500px] lg:h-[520px]">
-                <Link to={`/course/${_id}`}>
-                    <div className="rounded-md h-60 w-full overflow-hidden">
-                        <img className="rounded-md group-hover:scale-125 object-cover h-60 w-full transition-all duration-700" src={courseImage} alt="Course image" />
-                    </div>
-                </Link>
-                <div className="mt-4 flex flex-col justify-between h-[210px] lg:h-[230px] gap-2 lg:gap-0">
-                    <div className="flex flex-col justify-between h-24">
-                        <Link to={`/course/${_id}`}>
-                            <a>
-                                <h3 className="text-secondary font-semibold text-base lg:text-xl tracking-tight my-2">{courseName}</h3>
-                            </a>
-                        </Link>
-                        <div>
-                            <TruncatedText text={shortDescription} wordCount={4} />
-                        </div>
+    const {
+        _id,
+        courseName,
+        shortDescription,
+        instructorName,
+        courseImage,
+        totalEnrollment,
+        price,
+    } = course;
 
-                        <h3 className="text-secondary font-medium text-sm tracking-tight my-2">Instructor: {instructorName}</h3>
-                        <div className="flex items-center my-2">
-                            <FaUserFriends className="text-primary text-xl" />
-                            <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">{totalEnrollment} Students Enrolled</span>
+    return (
+        <div
+            data-aos="fade-up"
+            className="group bg-white rounded-2xl border border-slate-100 hover:border-violet-200 shadow-sm hover:shadow-xl hover:shadow-violet-500/10 overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
+        >
+            {/* Image */}
+            <Link to={`/course/${_id}`} className="block relative overflow-hidden">
+                <div className="relative h-52 overflow-hidden">
+                    <img
+                        src={courseImage}
+                        alt={courseName}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    {/* Hover Play Button */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <div className="w-14 h-14 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                            <MdOutlinePlayLesson className="text-2xl ml-0.5" />
                         </div>
                     </div>
-                    <div className="flex items-center justify-between lg:my-2 ">
-                        <span className="text-3xl font-semibold text-gray-700 ">${price}</span>
-                        <Link to={`/course/${_id}`}>
-                            <button className="text-white bg-primary hover:bg-accent font-medium rounded-md text-sm px-5 py-2.5 text-center">Enroll Now</button>
-                        </Link>
+
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="bg-violet-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                            Bestseller
+                        </span>
                     </div>
+                    <div className="absolute top-3 right-3">
+                        <span className="bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
+                            <MdOutlineTimer className="text-base" />
+                            12h
+                        </span>
+                    </div>
+                </div>
+            </Link>
+
+            {/* Content */}
+            <div className="p-6 flex flex-col flex-1">
+                {/* Rating Row */}
+                <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-1.5">
+                        {[...Array(5)].map((_, i) => (
+                            <FaStar
+                                key={i}
+                                className={`text-xs ${i < 4 ? 'text-amber-400' : 'text-slate-200'}`}
+                            />
+                        ))}
+                        <span className="text-slate-500 text-xs ml-1">(4.8)</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-slate-400 text-xs">
+                        <FaUserFriends className="text-violet-400" />
+                        <span>{totalEnrollment?.toLocaleString()} enrolled</span>
+                    </div>
+                </div>
+
+                {/* Title */}
+                <Link to={`/course/${_id}`}>
+                    <h3 className="text-slate-900 font-bold text-lg leading-snug mb-2 group-hover:text-violet-700 transition-colors duration-300 line-clamp-2">
+                        {courseName}
+                    </h3>
+                </Link>
+
+                {/* Description */}
+                <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-2 flex-1">
+                    {shortDescription}
+                </p>
+
+                {/* Instructor */}
+                <div className="flex items-center gap-2 mb-5 pb-5 border-b border-slate-100">
+                    <div className="w-7 h-7 bg-gradient-to-br from-violet-500 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        {instructorName?.charAt(0)?.toUpperCase()}
+                    </div>
+                    <span className="text-slate-500 text-sm">
+                        by{' '}
+                        <span className="font-semibold text-slate-700 hover:text-violet-600 transition-colors cursor-pointer">
+                            {instructorName}
+                        </span>
+                    </span>
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <span className="text-2xl font-bold text-slate-900">${price}</span>
+                        <span className="text-slate-400 text-xs ml-1 line-through">
+                            ${Math.round(price * 1.4)}
+                        </span>
+                    </div>
+                    <Link to={`/course/${_id}`}>
+                        <button className="group/btn inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all duration-300 hover:shadow-md hover:shadow-violet-500/30">
+                            Enroll Now
+                            <FaArrowRight className="text-xs group-hover/btn:translate-x-0.5 transition-transform" />
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

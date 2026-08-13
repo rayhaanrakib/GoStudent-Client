@@ -11,47 +11,65 @@ import OurServices from './../../components/OurServices/OurServices';
 import Faq from '../../components/Faq/Faq';
 import AboutUs from '../../components/AboutUs/AboutUs';
 import Newsletter from '../../components/Newsletter/Newsletter';
+import HowItWorks from '../../components/HowItWorks/HowItWorks';
+import LearningCategories from '../../components/LearningCategories/LearningCategories';
+import FeaturedInstructors from '../../components/FeaturedInstructors/FeaturedInstructors';
 
 const Home = () => {
     return (
-        <div>
+        <div className="overflow-x-hidden">
             <Helmet title='GoStudent Classroom | Empower Learning, Ignite Futures' />
-            <div className='py-0 lg:py-5'>
-                <Banner></Banner>
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <Partners />
-            </div>
 
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <Feedback />
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <OurCourses />
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <OurServices />
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <BecomeInstructor />
-            </div>
-            <div className='mt-20'>
-                <AboutCourses></AboutCourses>
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-20'>
-                <AboutUs />
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-10'>
-                <Faq />
-            </div>
-            <div data-aos="fade-up" className='container mx-auto mt-10'>
-                <Newsletter />
-            </div>
+            {/* Hero - Full viewport, no container needed */}
+            <Banner />
 
-            <ScrollToTop className='flex justify-center items-center' smooth />
+            {/* Partners - Subtle, right after hero */}
+            <Partners />
+
+            {/* Popular Courses */}
+            <OurCourses />
+
+            {/* Browse Categories - NEW */}
+            <LearningCategories />
+
+            {/* What We Offer - Dark section for contrast */}
+            <AboutCourses />
+
+            {/* How It Works - NEW */}
+            <HowItWorks />
+
+            {/* Stats / Why Choose Us */}
+            <OurServices />
+
+            {/* Featured Instructors - NEW */}
+            <FeaturedInstructors />
+
+            {/* Testimonials */}
+            <Feedback />
+
+            {/* Become Instructor CTA */}
+            <BecomeInstructor />
+
+            {/* Team */}
+            <AboutUs />
+
+            {/* FAQ */}
+            <Faq />
+
+            {/* Newsletter */}
+            <Newsletter />
+
+            {/* Scroll To Top */}
+            <ScrollToTop
+                smooth
+                className="!flex !items-center !justify-center !bg-gradient-to-r !from-violet-600 !to-blue-600 !border-none !shadow-lg !shadow-violet-500/30 !rounded-xl"
+                component={
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                    </svg>
+                }
+            />
         </div>
-
-
     );
 };
 

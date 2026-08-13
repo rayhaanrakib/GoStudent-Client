@@ -1,152 +1,113 @@
 import React from 'react';
 import useTopCourses from '../../hooks/useTopCourses';
-import SectionTitle from './../../shared/SectionTitle';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import { Link, NavLink } from 'react-router-dom';
+import { FaArrowRight, FaUsers, FaStar } from "react-icons/fa";
+import { MdOutlineTimer } from "react-icons/md";
 
 const OurCourses = () => {
     const [topCourses] = useTopCourses();
 
     return (
-        <div className='px-5 lg:px-0'>
-            <SectionTitle heading="Explore Our Popular Courses" subheading="Discover Trending and Highly Recommended Classes" ></SectionTitle>
-            <div className='mt-16'>
-                <div className='flex justify-between'>
-                    <h1 className='text-xl lg:text-3xl font-semibold text-primary w-full pr-2 lg:pr-0 lg:w-1/3'>Most Popular and In-Demand Classes on Our Platform</h1>
-                    <NavLink to="/all-courses"><button className='btn bg-white'>All Courses</button></NavLink>
+        <div className='py-24 bg-white'>
+            <div className='container mx-auto px-6 lg:px-8'>
+                {/* Header */}
+                <div className='flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-16'>
+                    <div className="max-w-xl">
+                        <span className="inline-block text-violet-600 text-sm font-semibold tracking-widest uppercase mb-4">
+                            Popular Courses
+                        </span>
+                        <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+                            Explore Our Most
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-blue-600">
+                                In-Demand Classes
+                            </span>
+                        </h2>
+                    </div>
+                    <NavLink to="/all-courses">
+                        <button className="group inline-flex items-center gap-2 text-slate-700 font-semibold border-2 border-slate-200 hover:border-violet-600 hover:text-violet-600 px-6 py-3 rounded-xl transition-all duration-300">
+                            View All Courses
+                            <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                        </button>
+                    </NavLink>
                 </div>
-                <p className='text-secondary w-full md:w-3/4 mt-3 lg:mt-5'>Unlock a world of knowledge with our most sought-after courses. Explore trending topics and gain valuable skills from the courses that learners like you find most compelling. Enroll today to join the community of learners shaping their futures with our popular courses.</p>
-            </div>
 
-            {/* large screen */}
-            <div data-aos="fade-up" className='mt-10 hidden lg:block'>
+                {/* Swiper */}
+                <div data-aos="fade-up">
+                    <Swiper
+                        breakpoints={{
+                            0: { slidesPerView: 1 },
+                            640: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                        }}
+                        spaceBetween={24}
+                        pagination={{ clickable: true }}
+                        modules={[Pagination]}
+                        className="pb-14"
+                    >
+                        {topCourses?.map(course => (
+                            <SwiperSlide key={course._id}>
+                                <div className="group bg-white rounded-2xl border border-slate-100 hover:border-violet-200 shadow-sm hover:shadow-xl hover:shadow-violet-500/10 overflow-hidden transition-all duration-500">
+                                    {/* Image */}
+                                    <div className="relative overflow-hidden h-52">
+                                        <img
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            src={course.courseImage}
+                                            alt={course.courseName}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
+                                        <div className="absolute top-4 left-4">
+                                            <span className="bg-white/90 backdrop-blur-sm text-violet-700 text-xs font-semibold px-3 py-1 rounded-full">
+                                                Bestseller
+                                            </span>
+                                        </div>
+                                    </div>
 
-                <Swiper
-                    slidesPerView={3}
-                    spaceBetween={30}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    modules={[Pagination]}
-                    className="mySwiper min-h-[75vh]"
-                >
-                    {
-                        topCourses?.map(course => <SwiperSlide key={course._id}>
-                            <div className="max-w-sm rounded-lg shadow-md bg-white mb-16">
-                                <div className='h-56 w-full'>
-                                    <img className="rounded-t-lg object-cover" src={course.courseImage} alt="" />
+                                    {/* Content */}
+                                    <div className="p-6">
+                                        <h5 className="text-lg font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-violet-700 transition-colors">
+                                            {course.courseName}
+                                        </h5>
+                                        <p className="text-slate-500 text-sm mb-4 line-clamp-2">{course.shortDescription}</p>
+
+                                        {/* Meta */}
+                                        <div className="flex items-center gap-4 text-sm text-slate-500 mb-5">
+                                            <span className="flex items-center gap-1.5">
+                                                <FaUsers className="text-violet-500" />
+                                                {course.totalEnrollment?.toLocaleString()}
+                                            </span>
+                                            <span className="flex items-center gap-1.5">
+                                                <FaStar className="text-amber-400" />
+                                                4.8
+                                            </span>
+                                            <span className="flex items-center gap-1.5">
+                                                <MdOutlineTimer className="text-violet-500" />
+                                                12h
+                                            </span>
+                                        </div>
+
+                                        {/* Footer */}
+                                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                            <span className="text-2xl font-bold text-violet-600">
+                                                ${course.price || '49'}
+                                            </span>
+                                            <Link to={`course/${course._id}`}>
+                                                <button className="group/btn inline-flex items-center gap-2 bg-violet-50 hover:bg-violet-600 text-violet-700 hover:text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-all duration-300">
+                                                    Enroll Now
+                                                    <FaArrowRight className="text-xs group-hover/btn:translate-x-0.5 transition-transform" />
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="p-5">
-                                    <a>
-                                        <h5 className="mb-2 text-xl font-semibold tracking-tight">{course.courseName}</h5>
-                                    </a>
-                                    <p className="mb-3 font-normal text-primary">Total Enrollment: {course.totalEnrollment}</p>
-                                    <p className="mb-3 h-20 font-normal text-gray-400">{course.shortDescription}</p>
-                                    <Link to={`course/${course._id}`}>
-                                        <a className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white  rounded-lg focus:ring-4 focus:outline-none bg-primary focus:ring-primary">
-                                            Read more
-                                            <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                            </svg>
-                                        </a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </SwiperSlide>)
-                    }
-
-                </Swiper>
-
-
-
-            </div>
-            {/* medium screen */}
-            <div data-aos="fade-up" className='mt-10 hidden md:block lg:hidden'>
-
-                <Swiper
-                    slidesPerView={2}
-                    spaceBetween={30}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    modules={[Pagination]}
-                    className="mySwiper min-h-[90vh]"
-                >
-                    {
-                        topCourses?.map(course => <SwiperSlide key={course._id}>
-                            <div className="max-w-sm rounded-lg shadow bg-secondary">
-                                <div className='h-56 w-full'>
-                                    <img className="rounded-t-lg object-cover" src={course.courseImage} alt="" />
-                                </div>
-                                <div className="p-5">
-                                    <a>
-                                        <h5 className="mb-2 text-xl font-bold tracking-tight text-white">{course.courseName}</h5>
-                                    </a>
-                                    <p className="mb-3 font-normal text-primary">Total Enrollment: {course.totalEnrollment}</p>
-                                    <p className="mb-3 h-20 font-normal text-gray-400">{course.shortDescription}</p>
-                                    <Link to={`course/${course._id}`}>
-                                        <a className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white  rounded-lg focus:ring-4 focus:outline-none bg-primary focus:ring-primary">
-                                            Read more
-                                            <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                            </svg>
-                                        </a>
-                                    </Link>
-                                </div>
-                            </div>
-                        </SwiperSlide>)
-                    }
-
-                </Swiper>
-
-
-
-            </div>
-            {/* small screen */}
-            <div data-aos="fade-up" className='mt-10 block md:hidden'>
-
-                <Swiper
-                    slidesPerView={1}
-                    spaceBetween={30}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    modules={[Pagination]}
-                    className="mySwiper min-h-[80vh]"
-                >
-                    {
-                        topCourses?.map(course => <SwiperSlide key={course._id}>
-                            <div className="max-w-sm rounded-lg shadow bg-secondary">
-                                <div className='h-48 w-full'>
-                                    <img className="rounded-t-lg object-cover" src={course.courseImage} alt="" />
-                                </div>
-                                <div className="p-5">
-                                    <a>
-                                        <h5 className="mb-2 text-lg font-bold tracking-tight text-white">{course.courseName}</h5>
-                                    </a>
-                                    <p className="mb-3 font-normal text-primary">Total Enrollment: {course.totalEnrollment}</p>
-                                    <p className="mb-3 h-20 font-normal text-gray-400">{course.shortDescription}</p>
-                                    <Link to={`course/${course._id}`}>
-                                        <a className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white  rounded-lg focus:ring-4 focus:outline-none bg-primary focus:ring-primary">
-                                            Read more
-                                            <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                            </svg>
-                                        </a>
-                                    </Link>
-
-                                </div>
-                            </div>
-                        </SwiperSlide>)
-                    }
-
-                </Swiper>
-
-
-
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             </div>
         </div>
     );

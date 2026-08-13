@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 
 const AboutUs = () => {
     return (
-        <div data-aos="fade-up" className='container mx-auto mt-10'>
+        <div data-aos="fade-up">
             <Helmet><title>About Us | GS Classroom</title></Helmet>
             <OurTeam></OurTeam>
         </div>

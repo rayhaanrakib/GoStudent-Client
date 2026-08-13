@@ -1,83 +1,102 @@
+import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
-import './styles.css';
+import useFeedbacks from '../../hooks/useFeedbacks';
+import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { useRef } from 'react';
-import SectionTitle from './../../shared/SectionTitle';
-import useFeedbacks from '../../hooks/useFeedbacks';
 
 const Feedback = () => {
     const [feedbacks] = useFeedbacks();
     const progressCircle = useRef(null);
     const progressContent = useRef(null);
+
     const onAutoplayTimeLeft = (s, time, progress) => {
-        progressCircle.current.style.setProperty('--progress', 1 - progress);
-        progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+        if (progressCircle.current) progressCircle.current.style.setProperty('--progress', 1 - progress);
+        if (progressContent.current) progressContent.current.textContent = `${Math.ceil(time / 1)}s`;
     };
 
     return (
-        <div className='py-10'>
-            <SectionTitle heading="Success Stories" subheading="Real Feedback, Real Growth." />
-            <div className='flex flex-col lg:flex-row items-center gap-x-10 mt-5'>
-                <div data-aos="fade-up" className='lg:relative m-10'>
-                    <img className='w-[800px] hidden lg:block object-cover' src="https://i.ibb.co/D4ckjdK/user3.jpg" alt="" />
-                    <img className='w-[800px] block lg:hidden object-cover rounded-md' src="https://i.ibb.co/rQJM3Vn/user4.jpg" alt="" />
-                    <div className='hidden lg:block absolute -left-12 -bottom-12 '>
-                        <img src="https://i.ibb.co/nzPxqDh/shape-02.png" alt="" />
-                    </div>
+        <section className='py-20 lg:py-28 bg-slate-50'>
+            <div className='container mx-auto px-6 lg:px-8'>
+                {/* Header */}
+                <div className="text-center mb-14 lg:mb-16 max-w-2xl mx-auto">
+                    <span className="inline-block text-violet-600 text-xs font-extrabold tracking-[0.15em] uppercase mb-4">
+                        Testimonials
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-5">
+                        What Our Students
+                        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-blue-600">
+                            Are Saying
+                        </span>
+                    </h2>
+                    <p className="text-slate-500 text-base lg:text-lg leading-relaxed">
+                        Real stories from real learners — discover how GoStudent has transformed their careers and lives.
+                    </p>
                 </div>
-                <Swiper
-                    spaceBetween={30}
-                    centeredSlides={true}
-                    autoplay={{
-                        delay: 2500,
-                        disableOnInteraction: false,
-                    }}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    modules={[Autoplay, Pagination]}
-                    onAutoplayTimeLeft={onAutoplayTimeLeft}
-                    className="mySwiper my-20"
-                >
 
-
-                    {
-                        feedbacks?.map(feedback => <SwiperSlide key={feedback._id}>
-                            <div className='px-10 lg:px-0'>
-                                <div className='w-10 md:w-20'>
-                                    <img className='' src="https://i.ibb.co/f2mpwPq/quote.png" alt="" />
-                                </div>
-                                <p className='my-10 text-start text-gray-700 text-xl md:text-2xl'>{feedback?.feedbackText}</p>
-                                <div className='flex items-center gap-4 mb-20'>
-                                    <div className='h-20 w-20 object-cover rounded-full'>
-                                        <img className='rounded-full' src={feedback?.image} alt="" />
+                <div data-aos="fade-up" className="relative">
+                    <Swiper
+                        spaceBetween={24}
+                        centeredSlides={false}
+                        autoplay={{ delay: 4000, disableOnInteraction: false }}
+                        pagination={{ clickable: true, dynamicBullets: true }}
+                        modules={[Autoplay, Pagination]}
+                        onAutoplayTimeLeft={onAutoplayTimeLeft}
+                        className="pb-14"
+                        slidesPerView={1}
+                        breakpoints={{
+                            640: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                        }}
+                    >
+                        {feedbacks?.map((feedback) => (
+                            <SwiperSlide key={feedback._id}>
+                                <article className="bg-white rounded-3xl p-7 lg:p-8 shadow-sm hover:shadow-xl hover:shadow-violet-500/10 border border-slate-100 hover:border-violet-200 transition-all duration-500 h-full flex flex-col">
+                                    {/* Stars */}
+                                    <div className="flex items-center gap-1 mb-5">
+                                        {[...Array(5)].map((_, i) => (
+                                            <FaStar key={i} className="text-amber-400 text-sm" />
+                                        ))}
+                                        <span className="ml-2 text-xs font-bold text-slate-300">5.0</span>
                                     </div>
-                                    <div>
-                                        <h2 className='text-start font-semibold'>{feedback?.name}</h2>
-                                        <h2 className='text-start text-sm'>{feedback?.title}</h2>
+
+                                    {/* Quote */}
+                                    <div className="relative mb-6">
+                                        <FaQuoteLeft className="text-violet-100 text-4xl absolute -top-3 -left-1 -z-10" />
+                                        <blockquote className="text-slate-600 leading-relaxed text-sm lg:text-base relative z-10">
+                                            "{feedback?.feedbackText}"
+                                        </blockquote>
                                     </div>
-                                </div>
 
-                            </div>
-                        </SwiperSlide>
-                        )
-                    }
+                                    {/* Author */}
+                                    <div className="flex items-center gap-4 mt-auto pt-6 border-t border-slate-100">
+                                        <img
+                                            src={feedback?.image}
+                                            alt={feedback?.name}
+                                            className="w-12 h-12 rounded-xl object-cover ring-2 ring-violet-100 ring-offset-2 flex-shrink-0"
+                                        />
+                                        <div>
+                                            <h4 className="font-extrabold text-slate-900 text-sm">{feedback?.name}</h4>
+                                            <p className="text-slate-400 text-xs font-medium">{feedback?.title}</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
 
-
-
-                    <div className="autoplay-progress" slot="container-end">
-                        <svg viewBox="0 0 48 48" ref={progressCircle}>
-                            <circle cx="24" cy="24" r="20"></circle>
-                        </svg>
-                        <span ref={progressContent}></span>
-                    </div>
-                </Swiper>
+                    {/* Progress indicator */}
+                    <div className="autoplay-progress fixed bottom-8 right-8 z-50 hidden md:flex items-center gap-3 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-xl border border-slate-100">
+                        <svg viewBox="0 0 48 48" ref={progressCircle} className="w-8 h-8 -rotate-90">
+                                            <circle cx="24" cy="24" r="20" fill="none" stroke="#e2e8f0" strokeWidth="3" />
+                                            <circle cx="24" cy="24" r="20" fill="none" stroke="#8b5cf6" strokeWidth="3" strokeLinecap="round" strokeDasharray="125.6" strokeDashoffset="125.6" style={{ strokeDashoffset: '125.6', transition: 'stroke-dashoffset 0.3s' }} />
+                                        </svg>
+                                        <span ref={progressContent} className="text-xs font-bold text-slate-500 tabular-nums">4s</span>
+                                    </div>
+                </div>
             </div>
-
-        </div>
+        </section>
     );
 };
 
