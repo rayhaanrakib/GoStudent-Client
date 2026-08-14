@@ -69,11 +69,11 @@ const Routes = createBrowserRouter([
             },
             {
                 path: "/course/:id",
-                element: <PrivateRoutes><CourseDetails></CourseDetails></PrivateRoutes>
+                element: <CourseDetails></CourseDetails>
             },
             {
                 path: "/payment/:id",
-                element: <PrivateRoutes><Payment></Payment></PrivateRoutes>
+                element: <Payment></Payment>
             },
             {
                 path: "/about-us",
