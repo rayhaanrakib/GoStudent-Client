@@ -1,4 +1,4 @@
-# [GoStudent Classroom](https://gostudent.vercel.app/) 
+# [GoStudent Classroom](https://rayhaanrakib-gostudent.vercel.app)
 ## Forge Your Future with Seamless Learning on Our Platform, Where Skills Meet Success.
 
 Welcome to GoStudent Classroom, your gateway to a transformative online learning experience. Our dynamic platform offers a range of features tailored for both students and instructors, fostering a thriving educational community.
