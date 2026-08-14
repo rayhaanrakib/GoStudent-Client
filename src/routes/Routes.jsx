@@ -10,9 +10,7 @@ import JoinAsTeacher from './../pages/Account/JoinAsTeacher';
 import AboutUs from '../pages/AboutUs/AboutUs';
 import CourseDetails from '../pages/CourseDetails/CourseDetails';
 import PrivateRoutes from './PrivateRoutes';
-import AdminDashboard from '../pages/Dashboards/AdminDashboard/AdminDashboard';
-import StudentDashboard from '../pages/Dashboards/StudentDashboard/StudentDashboard';
-import TeacherDashboard from '../pages/Dashboards/TeacherDashboard/TeacherDashboard';
+import DashboardLayout from '../pages/Dashboards/DashboardLayout';
 import AdminProfile from './../pages/Dashboards/AdminDashboard/AdminProfile';
 import StudentProfile from './../pages/Dashboards/StudentDashboard/StudentProfile';
 import TeacherProfile from './../pages/Dashboards/TeacherDashboard/TeacherProfile';
@@ -90,7 +88,7 @@ const Routes = createBrowserRouter([
     // admin routes
     {
         path: "admin-dashboard",
-        element: <AdminRoutes><AdminDashboard></AdminDashboard></AdminRoutes>,
+        element: <AdminRoutes><DashboardLayout /></AdminRoutes>,
         children: [
             {
                 path: "profile",
@@ -119,7 +117,7 @@ const Routes = createBrowserRouter([
     // normal user & student routes
     {
         path: "user-dashboard",
-        element: <PrivateRoutes><StudentDashboard></StudentDashboard></PrivateRoutes>,
+        element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
         children: [
             {
                 path: "profile",
@@ -143,7 +141,7 @@ const Routes = createBrowserRouter([
     // teacher routes
     {
         path: "teacher-dashboard",
-        element: <TeacherRoutes><TeacherDashboard></TeacherDashboard></TeacherRoutes>,
+        element: <TeacherRoutes><DashboardLayout /></TeacherRoutes>,
         children: [
             {
                 path: "profile",
