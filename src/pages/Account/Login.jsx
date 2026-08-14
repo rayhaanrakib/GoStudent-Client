@@ -102,6 +102,32 @@ const Login = () => {
                             </div>
                         </form>
 
+                        <div class="mt-5 grid">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const adminEmail = 'chris.admin@gostudent.com';
+                                    const adminPwd = 'admin123';
+                                    toast.loading('Signing in as Admin...', { id: 'admin-login' });
+                                    login(adminEmail, adminPwd)
+                                        .then(() => {
+                                            toast.dismiss('admin-login');
+                                            toast.success('Welcome, Admin');
+                                            navigate('/admin-dashboard');
+                                            window.location.reload();
+                                        })
+                                        .catch(() => {
+                                            toast.dismiss('admin-login');
+                                            toast('Real admin not seeded — opening Demo Admin', { icon: '👤' });
+                                            navigate('/demo/admin');
+                                        });
+                                }}
+                                class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border-2 border-dashed border-orange-300 font-semibold text-orange-600 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 transition-all text-sm sm:p-4"
+                            >
+                                Continue as Demo Admin
+                            </button>
+                        </div>
+
                     </div>
                 </div>
                 <div class="hidden w-1/2 rounded-xl md:block">

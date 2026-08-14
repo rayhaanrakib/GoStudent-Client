@@ -8,7 +8,7 @@ import useAxiosPublic from '../../hooks/useAxiosPublic';
 
 const Register = () => {
     const axiosPublic = useAxiosPublic();
-    const { signup, continueWithGoogle, userUpdateProfile } = useAuth();
+    const { signup, continueWithGoogle, userUpdateProfile, login } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -121,6 +121,32 @@ const Register = () => {
                                 <button type="submit" class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-primary text-white hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all text-smsm:p-4">Sign Up</button>
                             </div>
                         </form>
+
+                        <div class="mt-5 grid">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const adminEmail = 'chris.admin@gostudent.com';
+                                    const adminPwd = 'admin123';
+                                    toast.loading('Signing in as Admin...', { id: 'admin-login' });
+                                    login(adminEmail, adminPwd)
+                                        .then(() => {
+                                            toast.dismiss('admin-login');
+                                            toast.success('Welcome, Admin');
+                                            navigate('/admin-dashboard');
+                                            window.location.reload();
+                                        })
+                                        .catch(() => {
+                                            toast.dismiss('admin-login');
+                                            toast('Real admin not seeded — opening Demo Admin', { icon: '👤' });
+                                            navigate('/demo/admin');
+                                        });
+                                }}
+                                class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border-2 border-dashed border-orange-300 font-semibold text-orange-600 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 transition-all text-sm sm:p-4"
+                            >
+                                Continue as Demo Admin
+                            </button>
+                        </div>
 
                     </div>
                 </div>
