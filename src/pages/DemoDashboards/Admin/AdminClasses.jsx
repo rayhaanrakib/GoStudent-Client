@@ -120,10 +120,6 @@ const AdminClasses = () => {
                 <tr>
                   <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Class</th>
                   <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Instructor</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Price</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Enrolled</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Rating</th>
                   <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
                 </tr>
@@ -148,14 +144,7 @@ const AdminClasses = () => {
                           <span className="text-sm text-slate-600 truncate">{cls.instructorName}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">{cls.courseCategory}</td>
-                      <td className="px-6 py-4 text-sm font-bold text-secondary">${cls.price}</td>
-                      <td className="px-6 py-4 text-sm text-slate-600 font-medium flex items-center gap-1">
-                        <FaUsers className="text-slate-400" size={11} /> {cls.totalEnrollment}
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium flex items-center gap-1">
-                        <FaStar className="text-amber-500" size={12} /> {cls.courseRatings || '-'}
-                      </td>
+
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${status.classes}`}>
                           {status.label}
@@ -163,15 +152,6 @@ const AdminClasses = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-1.5">
-                          <button className="w-8 h-8 rounded-lg bg-gray-50 text-slate-500 hover:bg-blue-100 hover:text-blue-600 flex items-center justify-center transition" title="View Details">
-                            <FaEye size={12} />
-                          </button>
-                          <button
-                            onClick={() => toast(`Email sent to ${cls.instructorName}`)}
-                            className="w-8 h-8 rounded-lg bg-gray-50 text-slate-500 hover:bg-blue-100 hover:text-blue-600 flex items-center justify-center transition" title="Contact Instructor"
-                          >
-                            <FaEnvelope size={12} />
-                          </button>
                           {cls.courseStatus !== 1 && (
                             <button
                               onClick={() => updateStatus(cls._id, 1)}
