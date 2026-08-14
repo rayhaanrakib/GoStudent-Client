@@ -25,8 +25,10 @@ const roleConfig = {
     name: 'Student Dashboard',
     accentColor: 'from-primary to-green-600',
     sidebarItems: [
-      { label: 'Profile', to: '/user-dashboard/profile' },
-      { label: 'My Enroll Class', to: '/user-dashboard/class' },
+      { label: 'Overview',       to: '/user-dashboard/overview', exact: true },
+      { label: 'My Classes',     to: '/user-dashboard/class' },
+      { label: 'Progress',       to: '/user-dashboard/progress' },
+      { label: 'Profile',        to: '/user-dashboard/profile' },
     ],
   },
   teacher: {

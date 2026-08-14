@@ -20,6 +20,8 @@ import AllClassesInfo from '../pages/Dashboards/AdminDashboard/AllClassesInfo';
 import AddClass from '../pages/Dashboards/TeacherDashboard/AddClass';
 import AddedClasses from '../pages/Dashboards/TeacherDashboard/AddedClasses';
 import StudentClasses from '../pages/Dashboards/StudentDashboard/StudentClasses';
+import StudentOverview from '../pages/Dashboards/StudentDashboard/StudentOverview';
+import DemoStudentProgress from '../pages/Dashboards/StudentDashboard/StudentProgress';
 import AdminRoutes from './AdminRoutes';
 import TeacherRoutes from './TeacherRoutes';
 import Payment from '../pages/Payments/Payment';
@@ -27,7 +29,7 @@ import CourseProgress from './../pages/Dashboards/TeacherDashboard/CourseProgres
 import CourseUpdate from '../pages/Dashboards/TeacherDashboard/CourseUpdate';
 import StudentClassProgress from '../pages/Dashboards/StudentDashboard/StudentClassProgress';
 import DemoLayout from '../pages/DemoDashboards/DemoLayout';
-import StudentOverview from '../pages/DemoDashboards/Student/StudentOverview';
+import DemoStudentOverview from '../pages/DemoDashboards/Student/StudentOverview';
 import DemoStudentClasses from '../pages/DemoDashboards/Student/StudentClasses';
 import StudentProgress from '../pages/DemoDashboards/Student/StudentProgress';
 import DemoStudentProfile from '../pages/DemoDashboards/Student/StudentProfile';
@@ -120,19 +122,28 @@ const Routes = createBrowserRouter([
         element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
         children: [
             {
+                index: true,
+                element: <PrivateRoutes><StudentOverview /></PrivateRoutes>
+            },
+            {
+                path: "overview",
+                element: <PrivateRoutes><StudentOverview /></PrivateRoutes>
+            },
+            {
                 path: "profile",
                 element: <PrivateRoutes><StudentProfile></StudentProfile></PrivateRoutes>
-
             },
             {
                 path: "class",
                 element: <PrivateRoutes><StudentClasses></StudentClasses></PrivateRoutes>
-
+            },
+            {
+                path: "progress",
+                element: <PrivateRoutes><StudentProgress /></PrivateRoutes>
             },
             {
                 path: "details/:id",
                 element: <PrivateRoutes><StudentClassProgress></StudentClassProgress></PrivateRoutes>
-
             }
         ]
     },
@@ -176,7 +187,7 @@ const Routes = createBrowserRouter([
         children: [
             {
                 path: "student",
-                element: <StudentOverview />
+                element: <DemoStudentOverview />
             },
             {
                 path: "student/classes",
@@ -184,7 +195,7 @@ const Routes = createBrowserRouter([
             },
             {
                 path: "student/progress",
-                element: <StudentProgress />
+                element: <DemoStudentProgress />
             },
             {
                 path: "student/profile",
