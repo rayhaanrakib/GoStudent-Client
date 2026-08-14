@@ -201,27 +201,6 @@ const DemoLayout = () => {
               <h5 className="text-2xl text-gray-600 font-medium">{config.name}</h5>
             </div>
 
-            <div className="hidden md:flex space-x-2 px-3 py-2 rounded-xl bg-gray-50 overflow-x-auto max-w-sm">
-              {roleSwitcher.map(switcher => {
-                const Icon = switcher.icon;
-                const isCurrent = switcher.key === currentRole;
-                return (
-                  <Link
-                    key={switcher.key}
-                    to={switcher.to}
-                    className={
-                      isCurrent
-                        ? `px-4 py-2 flex items-center space-x-2 rounded-lg text-white bg-gradient-to-r ${config.accentColor} text-sm whitespace-nowrap`
-                        : 'px-4 py-2 flex items-center space-x-2 rounded-lg text-gray-500 text-sm hover:bg-white whitespace-nowrap transition'
-                    }
-                  >
-                    <Icon size={14} />
-                    <span className="font-medium">{switcher.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
             <div className="hidden lg:flex space-x-4 ml-auto">
               <div hidden className="md:block">
                 <div className="relative flex items-center text-gray-400 focus-within:text-primary">
