@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import CountUp from 'react-countup';
-import { FaBook, FaUsers, FaDollarSign, FaStar, FaArrowRight, FaPlus, FaEye, FaClock } from 'react-icons/fa';
+import { FaBook, FaUsers, FaDollarSign, FaStar, FaArrowRight, FaPlus, FaEye, FaClock, FaSearch } from 'react-icons/fa';
 import { useLocalStorage } from '../../../hooks/useStorage';
 import { mockTeacherClasses, mockClassEnrollments } from '../../../data/mockData';
+import TablePagination from '../../../components/shared/TablePagination';
+
+const ACTIVITY_PAGE_SIZE = 5;
 
 const TeacherOverview = () => {
   const [teacherClasses] = useLocalStorage('demo_teacher_classes', mockTeacherClasses);
   const [enrollments] = useLocalStorage('demo_class_enrollments', mockClassEnrollments);
+  const [activityPage, setActivityPage] = useState(1);
+  const [activitySearch, setActivitySearch] = useState('');
 
   const approvedClasses = teacherClasses.filter(c => c.courseStatus === 1);
   const pendingClasses = teacherClasses.filter(c => c.courseStatus === 0);
@@ -27,6 +32,23 @@ const TeacherOverview = () => {
   ];
 
   const recentClasses = [...approvedClasses].sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).slice(0, 3);
+
+  const allActivityRows = enrollments.flatMap(e =>
+    e.students.map(s => ({ enrollment: e, student: s }))
+  );
+
+  const filteredActivityRows = activitySearch.trim()
+    ? allActivityRows.filter(({ enrollment, student }) => {
+        const q = activitySearch.toLowerCase();
+        return student.name?.toLowerCase().includes(q) || enrollment.className?.toLowerCase().includes(q);
+      })
+    : allActivityRows;
+
+  const activityTotalPages = Math.max(1, Math.ceil(filteredActivityRows.length / ACTIVITY_PAGE_SIZE));
+  const paginatedActivityRows = filteredActivityRows.slice(
+    (activityPage - 1) * ACTIVITY_PAGE_SIZE,
+    activityPage * ACTIVITY_PAGE_SIZE
+  );
 
   return (
     <div className="py-6 px-4 sm:px-6 md:py-10 md:px-8">
@@ -141,6 +163,18 @@ const TeacherOverview = () => {
             View Students <FaArrowRight size={12} />
           </Link>
         </div>
+        <div className="mb-4 relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <FaSearch size={13} />
+          </span>
+          <input
+            type="text"
+            placeholder="Search by student name or class..."
+            value={activitySearch}
+            onChange={(e) => { setActivitySearch(e.target.value); setActivityPage(1); }}
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-blue-400 transition text-sm"
+          />
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-gray-50">
@@ -152,7 +186,7 @@ const TeacherOverview = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {enrollments.flatMap(e => e.students.slice(0, 1).map(s => ({ enrollment: e, student: s }))).slice(0, 5).map(({ enrollment, student }) => (
+              {paginatedActivityRows.map(({ enrollment, student }) => (
                 <tr key={`${enrollment.classId}-${student._id}`} className="hover:bg-gray-50 transition">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -180,6 +214,14 @@ const TeacherOverview = () => {
             </tbody>
           </table>
         </div>
+        <TablePagination
+          currentPage={activityPage}
+          totalPages={activityTotalPages}
+          totalItems={filteredActivityRows.length}
+          pageSize={ACTIVITY_PAGE_SIZE}
+          onPageChange={setActivityPage}
+          accentClass="bg-blue-500 border-blue-500 text-white"
+        />
       </div>
     </div>
   );

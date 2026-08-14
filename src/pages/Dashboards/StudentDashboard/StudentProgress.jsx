@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
   FaBook, FaTrophy, FaClock, FaChartBar,
-  FaArrowUp, FaStar, FaCheckCircle,
+  FaArrowUp, FaStar, FaCheckCircle, FaSearch,
 } from 'react-icons/fa';
 import useEnrolled from '../../../hooks/useEnrolled';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -14,9 +14,11 @@ import {
   mockWeeklyProgress,
   mockStudentPayments,
 } from '../../../data/mockData';
+import TablePagination from '../../../components/shared/TablePagination';
 
 // ── static demo weekly hours (used when no real data) ─────────────────────
 const DEMO_WEEKLY = mockWeeklyProgress;
+const PAYMENT_PAGE_SIZE = 5;
 
 // ── component ──────────────────────────────────────────────────────────────
 const StudentProgress = () => {
@@ -24,6 +26,9 @@ const StudentProgress = () => {
   const axiosSecure = useAxiosSecure();
   const enrolledFromAPI = useEnrolled();
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [paymentPage, setPaymentPage] = useState(1);
+  const [paymentSearch, setPaymentSearch] = useState('');
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState('all');
 
   // ── payment history from the real API ─────────────────────────────────
   const { data: paymentsFromAPI = [] } = useQuery({
@@ -73,6 +78,30 @@ const StudentProgress = () => {
         return pb - pa;
       }),
     [enrolled]
+  );
+
+  // ── unique payment methods for filter dropdown ─────────────────────────
+  const paymentMethods = useMemo(() => {
+    const methods = [...new Set(payments.map(p => p.method ?? p.paymentMethod ?? ''))].filter(Boolean);
+    return methods;
+  }, [payments]);
+
+  // ── filtered + paginated payments ─────────────────────────────────────
+  const filteredPayments = useMemo(() => {
+    return payments.filter(p => {
+      const courseName = p.courseName || p.name || '';
+      const method = p.method ?? p.paymentMethod ?? '';
+      const q = paymentSearch.toLowerCase();
+      const matchesSearch = !q || courseName.toLowerCase().includes(q) || method.toLowerCase().includes(q);
+      const matchesMethod = paymentMethodFilter === 'all' || method === paymentMethodFilter;
+      return matchesSearch && matchesMethod;
+    });
+  }, [payments, paymentSearch, paymentMethodFilter]);
+
+  const paymentTotalPages = Math.max(1, Math.ceil(filteredPayments.length / PAYMENT_PAGE_SIZE));
+  const paginatedPayments = filteredPayments.slice(
+    (paymentPage - 1) * PAYMENT_PAGE_SIZE,
+    paymentPage * PAYMENT_PAGE_SIZE
   );
 
   const tabOptions = [
@@ -323,16 +352,13 @@ const StudentProgress = () => {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════════════════════════
-          TAB: PAYMENT HISTORY
-      ══════════════════════════════════════════════════════════════════ */}
       {selectedTab === 'payments' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
             <div>
               <h2 className="text-xl font-semibold text-secondary">Payment History</h2>
               <p className="text-sm text-slate-500 mt-1">
-                {payments.length} transaction{payments.length !== 1 ? 's' : ''}
+                {filteredPayments.length} transaction{filteredPayments.length !== 1 ? 's' : ''}
                 {paymentsFromAPI.length === 0 && (
                   <span className="ml-2 text-amber-600 text-xs">(demo data)</span>
                 )}
@@ -342,6 +368,34 @@ const StudentProgress = () => {
               <div className="text-xs text-green-600 font-semibold">Total Spent</div>
               <div className="text-lg font-bold text-green-700">${totalSpent.toFixed(2)}</div>
             </div>
+          </div>
+
+          {/* Search + filter bar */}
+          <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <FaSearch size={13} />
+              </span>
+              <input
+                type="text"
+                placeholder="Search by course or payment method..."
+                value={paymentSearch}
+                onChange={(e) => { setPaymentSearch(e.target.value); setPaymentPage(1); }}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-primary transition text-sm"
+              />
+            </div>
+            {paymentMethods.length > 0 && (
+              <select
+                value={paymentMethodFilter}
+                onChange={(e) => { setPaymentMethodFilter(e.target.value); setPaymentPage(1); }}
+                className="py-2.5 px-3 rounded-xl border border-gray-200 outline-none focus:border-primary bg-white text-sm"
+              >
+                <option value="all">All Methods</option>
+                {paymentMethods.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           {payments.length === 0 ? (
@@ -365,7 +419,7 @@ const StudentProgress = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {payments.map((p, idx) => {
+                  {paginatedPayments.map((p, idx) => {
                     const courseName = p.courseName || p.name || `Course ${idx + 1}`;
                     const amount     = p.amount ?? p.price ?? 0;
                     const method     = p.method ?? p.paymentMethod ?? '—';
@@ -392,6 +446,16 @@ const StudentProgress = () => {
                   })}
                 </tbody>
               </table>
+              <div className="px-6 pb-4">
+                <TablePagination
+                  currentPage={paymentPage}
+                  totalPages={paymentTotalPages}
+                  totalItems={filteredPayments.length}
+                  pageSize={PAYMENT_PAGE_SIZE}
+                  onPageChange={setPaymentPage}
+                  accentClass="bg-primary border-primary text-white"
+                />
+              </div>
             </div>
           )}
         </div>
