@@ -28,6 +28,21 @@ import Payment from '../pages/Payments/Payment';
 import CourseProgress from './../pages/Dashboards/TeacherDashboard/CourseProgress';
 import CourseUpdate from '../pages/Dashboards/TeacherDashboard/CourseUpdate';
 import StudentClassProgress from '../pages/Dashboards/StudentDashboard/StudentClassProgress';
+import DemoLayout from '../pages/DemoDashboards/DemoLayout';
+import StudentOverview from '../pages/DemoDashboards/Student/StudentOverview';
+import DemoStudentClasses from '../pages/DemoDashboards/Student/StudentClasses';
+import StudentProgress from '../pages/DemoDashboards/Student/StudentProgress';
+import DemoStudentProfile from '../pages/DemoDashboards/Student/StudentProfile';
+import TeacherOverview from '../pages/DemoDashboards/Teacher/TeacherOverview';
+import TeacherAddClass from '../pages/DemoDashboards/Teacher/TeacherAddClass';
+import TeacherClasses from '../pages/DemoDashboards/Teacher/TeacherClasses';
+import TeacherStudents from '../pages/DemoDashboards/Teacher/TeacherStudents';
+import DemoTeacherProfile from '../pages/DemoDashboards/Teacher/TeacherProfile';
+import AdminOverview from '../pages/DemoDashboards/Admin/AdminOverview';
+import AdminClasses from '../pages/DemoDashboards/Admin/AdminClasses';
+import AdminUsers from '../pages/DemoDashboards/Admin/AdminUsers';
+import AdminRequests from '../pages/DemoDashboards/Admin/AdminRequests';
+import DemoAdminProfile from '../pages/DemoDashboards/Admin/AdminProfile';
 
 
 const Routes = createBrowserRouter([
@@ -68,7 +83,7 @@ const Routes = createBrowserRouter([
                 path: "/join-as-instructor",
                 element: <PrivateRoutes><JoinAsTeacher></JoinAsTeacher></PrivateRoutes>
             },
-            
+
         ]
     },
 
@@ -152,6 +167,70 @@ const Routes = createBrowserRouter([
             {
                 path: "update/:id",
                 element: <TeacherRoutes><CourseUpdate></CourseUpdate></TeacherRoutes>
+            }
+        ]
+    },
+
+    // Demo routes (public)
+    {
+        path: "demo",
+        element: <DemoLayout />,
+        children: [
+            {
+                path: "student",
+                element: <StudentOverview />
+            },
+            {
+                path: "student/classes",
+                element: <DemoStudentClasses />
+            },
+            {
+                path: "student/progress",
+                element: <StudentProgress />
+            },
+            {
+                path: "student/profile",
+                element: <DemoStudentProfile />
+            },
+            {
+                path: "teacher",
+                element: <TeacherOverview />
+            },
+            {
+                path: "teacher/add",
+                element: <TeacherAddClass />
+            },
+            {
+                path: "teacher/classes",
+                element: <TeacherClasses />
+            },
+            {
+                path: "teacher/students",
+                element: <TeacherStudents />
+            },
+            {
+                path: "teacher/profile",
+                element: <DemoTeacherProfile />
+            },
+            {
+                path: "admin",
+                element: <AdminOverview />
+            },
+            {
+                path: "admin/classes",
+                element: <AdminClasses />
+            },
+            {
+                path: "admin/users",
+                element: <AdminUsers />
+            },
+            {
+                path: "admin/requests",
+                element: <AdminRequests />
+            },
+            {
+                path: "admin/profile",
+                element: <DemoAdminProfile />
             }
         ]
     }
