@@ -18,6 +18,7 @@ import {
   FaClock,
   FaTimes,
 } from 'react-icons/fa';
+import TablePagination from '../../../components/shared/TablePagination';
 
 const statusConfig = {
   1: { label: 'Approved', cls: 'bg-green-100 text-green-700', icon: FaCheckCircle },
@@ -25,12 +26,16 @@ const statusConfig = {
   rejected: { label: 'Rejected', cls: 'bg-red-100 text-red-700', icon: FaTimes },
 };
 
+const PAGE_SIZE_LIST = 8;
+const PAGE_SIZE_GRID = 6;
+
 const AddedClasses = () => {
   const axiosSecure = useAxiosSecure();
   const { user, loading } = useAuth();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: addedClasses = [], refetch, isLoading } = useQuery({
     queryKey: ['addedClasses'],
@@ -76,6 +81,10 @@ const AddedClasses = () => {
     return matchesSearch && matchesStatus;
   });
 
+  const pageSize = viewMode === 'list' ? PAGE_SIZE_LIST : PAGE_SIZE_GRID;
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   return (
     <div className="py-6 px-4 sm:px-6 md:py-10 md:px-8">
       <Helmet title="My Courses | GS Classroom" />
@@ -108,7 +117,7 @@ const AddedClasses = () => {
               type="text"
               placeholder="Search by name or category..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary transition text-sm"
             />
           </div>
@@ -117,7 +126,7 @@ const AddedClasses = () => {
               <FaFilter className="text-gray-400" size={14} />
               <select
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
                 className="py-3 px-3 rounded-xl border border-gray-200 outline-none focus:border-primary bg-white text-sm"
               >
                 <option value="all">All Status</option>
@@ -128,13 +137,13 @@ const AddedClasses = () => {
             </div>
             <div className="flex rounded-xl border border-gray-200 overflow-hidden">
               <button
-                onClick={() => setViewMode('grid')}
+                onClick={() => { setViewMode('grid'); setCurrentPage(1); }}
                 className={`px-4 py-3 text-sm transition ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
               >
                 Grid
               </button>
               <button
-                onClick={() => setViewMode('list')}
+                onClick={() => { setViewMode('list'); setCurrentPage(1); }}
                 className={`px-4 py-3 text-sm transition ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
               >
                 List
@@ -162,8 +171,9 @@ const AddedClasses = () => {
           </Link>
         </div>
       ) : viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((course) => {
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {paginated.map((course) => {
             const status = statusConfig[course.courseStatus] ?? statusConfig[0];
             const StatusIcon = status.icon;
             return (
@@ -247,6 +257,15 @@ const AddedClasses = () => {
               </div>
             );
           })}
+          </div>
+          <TablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            accentClass="bg-primary border-primary text-white"
+          />
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -254,6 +273,9 @@ const AddedClasses = () => {
             <table className="w-full text-left">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="px-4 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">
+                    #
+                  </th>
                   <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Class
                   </th>
@@ -275,11 +297,14 @@ const AddedClasses = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map((course) => {
+                {paginated.map((course, idx) => {
                   const status = statusConfig[course.courseStatus] ?? statusConfig[0];
                   const StatusIcon = status.icon;
                   return (
                     <tr key={course._id} className="hover:bg-gray-50 transition">
+                      <td className="px-4 py-4 text-sm text-slate-400 font-medium">
+                        {(currentPage - 1) * PAGE_SIZE_LIST + idx + 1}
+                      </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <img
@@ -336,6 +361,16 @@ const AddedClasses = () => {
                 })}
               </tbody>
             </table>
+          </div>
+          <div className="px-6 pb-4">
+            <TablePagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filtered.length}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+              accentClass="bg-primary border-primary text-white"
+            />
           </div>
         </div>
       )}

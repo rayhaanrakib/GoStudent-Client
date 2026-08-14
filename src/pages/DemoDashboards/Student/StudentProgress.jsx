@@ -1,15 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { FaBook, FaTrophy, FaClock, FaChartBar, FaArrowUp, FaStar, FaCheckCircle } from 'react-icons/fa';
+import { FaBook, FaTrophy, FaClock, FaChartBar, FaArrowUp, FaStar, FaCheckCircle, FaSearch } from 'react-icons/fa';
 import { useLocalStorage } from '../../../hooks/useStorage';
 import { mockStudentEnrolled, mockWeeklyProgress, mockStudentPayments } from '../../../data/mockData';
+import TablePagination from '../../../components/shared/TablePagination';
+
+const PAYMENT_PAGE_SIZE = 5;
 
 const StudentProgress = () => {
   const [enrolledCourses, setEnrolledCourses] = useLocalStorage('demo_student_enrolled', mockStudentEnrolled);
   const [weeklyProgress] = useLocalStorage('demo_student_weekly', mockWeeklyProgress);
   const [payments] = useLocalStorage('demo_student_payments', mockStudentPayments);
   const [selectedTab, setSelectedTab] = useLocalStorage('demo_student_progress_tab', 'overview');
+  const [paymentPage, setPaymentPage] = useState(1);
+  const [paymentSearch, setPaymentSearch] = useState('');
 
   const totalHours = weeklyProgress.reduce((acc, d) => acc + d.hours, 0);
   const maxHours = Math.max(...weeklyProgress.map(d => d.hours));
@@ -32,6 +37,19 @@ const StudentProgress = () => {
 
   const sortedByProgress = useMemo(() =>
     [...enrolledCourses].sort((a, b) => b.progress - a.progress), [enrolledCourses]);
+
+  const filteredPayments = paymentSearch.trim()
+    ? payments.filter(p => {
+        const q = paymentSearch.toLowerCase();
+        return p.courseName?.toLowerCase().includes(q) || p.method?.toLowerCase().includes(q);
+      })
+    : payments;
+
+  const paymentTotalPages = Math.max(1, Math.ceil(filteredPayments.length / PAYMENT_PAGE_SIZE));
+  const paginatedPayments = filteredPayments.slice(
+    (paymentPage - 1) * PAYMENT_PAGE_SIZE,
+    paymentPage * PAYMENT_PAGE_SIZE
+  );
 
   const tabOptions = [
     { value: 'overview', label: 'Overview' },
@@ -242,6 +260,20 @@ const StudentProgress = () => {
               <div className="text-lg font-bold text-green-700">${totalSpent.toFixed(2)}</div>
             </div>
           </div>
+          <div className="p-4 border-b border-gray-100">
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <FaSearch size={13} />
+              </span>
+              <input
+                type="text"
+                placeholder="Search by course name or payment method..."
+                value={paymentSearch}
+                onChange={(e) => { setPaymentSearch(e.target.value); setPaymentPage(1); }}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-primary transition text-sm"
+              />
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-gray-50">
@@ -254,7 +286,7 @@ const StudentProgress = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {payments.map(p => (
+                {paginatedPayments.map(p => (
                   <tr key={p._id} className="hover:bg-gray-50 transition">
                     <td className="px-6 py-4 text-sm font-medium text-secondary">{p.courseName}</td>
                     <td className="px-6 py-4 text-sm font-semibold text-secondary">${p.amount.toFixed(2)}</td>
@@ -269,6 +301,16 @@ const StudentProgress = () => {
                 ))}
               </tbody>
             </table>
+            <div className="px-6 pb-4">
+              <TablePagination
+                currentPage={paymentPage}
+                totalPages={paymentTotalPages}
+                totalItems={filteredPayments.length}
+                pageSize={PAYMENT_PAGE_SIZE}
+                onPageChange={setPaymentPage}
+                accentClass="bg-primary border-primary text-white"
+              />
+            </div>
           </div>
         </div>
       )}
