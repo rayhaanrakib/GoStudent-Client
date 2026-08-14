@@ -1,7 +1,9 @@
 {
   "name": "gostudent-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "homepage": "https://rayhaanrakib-gostudent.vercel.app",
   "type": "module",
   "scripts": {
     "dev": "vite",
